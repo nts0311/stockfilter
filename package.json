@@ -1,0 +1,19 @@
+{
+  "name": "stockfilter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.1.5"
+  },
+  "dependencies": {
+    "@mathieuc/tradingview": "^3.4.1",
+    "talib": "^1.1.5"
+  }
+}
