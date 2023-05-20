@@ -16,7 +16,9 @@ export class Stock {
             return 0
         }
 
-        return this.prices[0].volume
+        //return this.prices[0].volume
+
+        return this.prices[this.prices.length - 1].volume
     }
 
     //T - 1
@@ -25,7 +27,7 @@ export class Stock {
             return 0
         }
 
-        return this.prices[1].volume
+        return this.prices[this.prices.length - 2].volume
     }
 
     public getAverageVolumeInDay(numberOfDay: number): number {
@@ -34,6 +36,18 @@ export class Stock {
             .reduce((acc, val) => acc + val, 0.0)
 
         return sum / numberOfDay
+    }
+
+    public get closePriceT(): number {
+        return this.prices.last().close
+    }
+
+    public get closePriceTMinus1(): number {
+        return this.prices[this.prices.length - 2].close
+    }
+
+    public get closePrice(): number[] {
+        return this.prices.map(c => c.close)
     }
     
 }

@@ -1,0 +1,66 @@
+[
+{
+  name: 'MA',
+  group: 'Overlap Studies',
+  hint: 'Moving average',
+  inputs: [ { name: 'inReal', type: 'real' } ],
+  optInputs: [
+    {
+      name: 'optInTimePeriod',
+      displayName: 'Time Period',
+      defaultValue: 30,
+      hint: 'Number of period',
+      type: 'integer_range'
+    },
+    {
+      name: 'optInMAType',
+      displayName: 'MA Type',
+      defaultValue: 0,
+      hint: 'Type of Moving Average',
+      type: 'integer_list'
+    }
+  ],
+  outputs: [ { '0': 'line', name: 'outReal', type: 'real', flags: {} } ]
+},
+
+{
+  name: 'MACD',
+  group: 'Momentum Indicators',
+  hint: 'Moving Average Convergence/Divergence',
+  inputs: [ { name: 'inReal', type: 'real' } ],
+  optInputs: [
+    {
+      name: 'optInFastPeriod',
+      displayName: 'Fast Period',
+      defaultValue: 12,
+      hint: 'Number of period for the fast MA',
+      type: 'integer_range'
+    },
+    {
+      name: 'optInSlowPeriod',
+      displayName: 'Slow Period',
+      defaultValue: 26,
+      hint: 'Number of period for the slow MA',
+      type: 'integer_range'
+    },
+    {
+      name: 'optInSignalPeriod',
+      displayName: 'Signal Period',
+      defaultValue: 9,
+      hint: 'Smoothing for the signal line (nb of period)',
+      type: 'integer_range'
+    }
+  ],
+  outputs: [
+    { '0': 'line', name: 'outMACD', type: 'real', flags: {} },
+    {
+      '0': 'line_dash',
+      name: 'outMACDSignal',
+      type: 'real',
+      flags: {}
+    },
+    { '0': 'histogram', name: 'outMACDHist', type: 'real', flags: {} }
+  ]
+}
+
+]
