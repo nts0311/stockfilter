@@ -4,6 +4,13 @@ import { AverageVolumeFilter } from "./filter/AverageVolumeFilter";
 import { PriceVsMAFilter } from './filter/PriceVsMAFilter';
 import { MACDAndEMA12Filter } from './filter/MACDAndEMA12Filter';
 import { LowVolumeFilter } from './filter/LowVolumeFilter';
+import { MacdComparatorFilter, MacdCrossOverFilter } from "./filter/v2/MacdComparatorFilter";
+import { StockMutipeFilterSetService } from './services/StockMutipeFilterSetService';
+import { CompareType } from './filter/filter';
+import { TwoLastSessionEma12ComparatorFilter } from './filter/v2/TwoLastSessionEma12ComparatorFilter';
+import { RsiComparatorFilter } from './filter/v2/RsiComparatorFilter';
+import { Ma5AndMa20ComparatorFilter } from './filter/v2/Ma5AndMa20ComparatorFilter';
+
 const TradingViewService = require('./services/TradingViewService')
 const fs = require("fs")
 const talib = require("talib")
@@ -21,17 +28,7 @@ async function getPrice() {
    
 
     let listSymbol: string[] = (await TradingViewService.getListMarketSymbol())
-    // [
-    //   'HOSE:VHM',
-    //   'HOSE:FPT',
-    //   'HOSE:NVL',
-      
-      
-     
-    //   'HOSE:FUESSVFL',
-    //   'HOSE:ADS',
-    //   'UPCOM:WSB'
-    // ]
+    
 
     const numberOfChunk = listSymbol.length
     let symbolChunks = listSymbol.chunks(numberOfChunk)
@@ -46,27 +43,26 @@ async function getPrice() {
     await Promise.allSettled(job)
     
     console.log("done")
-
-    // let worker = new SerialStockFilterServices(listSymbol, [new AverageVolumeFilter()])
-
-    // let result: string[] = (await worker.performFiltering()).map(s => s.marketSymbol)
-
-    // console.log(result)
-    // console.log(result.length)
 }
 
 async function processChunk(listSymbol: string[]) {
-    let worker = new SerialStockFilterServices(
+    let worker = new StockMutipeFilterSetService(
         listSymbol, 
         [
-            new LowVolumeFilter(),
-            new PriceVsMAFilter(),
-            new AverageVolumeFilter(),
-            new MACDAndEMA12Filter()
+            [
+                new LowVolumeFilter(),
+                //new TwoLastSessionEma12ComparatorFilter(CompareType.greaterThan),
+                //new RsiComparatorFilter(CompareType.greaterThan, 60),
+                new MacdCrossOverFilter()
+            ],
+            [
+                new LowVolumeFilter(),
+                new Ma5AndMa20ComparatorFilter()
+            ]
         ]
     )
 
-    let result: string[] = (await worker.performFiltering()).map(s => s.marketSymbol)
+    let result: string[] = await worker.performFiltering()
 
     console.log(result.length)
     writeResult(result)
@@ -79,5 +75,5 @@ function writeResult(obj: any) {
 
 getPrice()
 
-//var function_desc = talib.explain("MA");
-//console.dir(function_desc);
+// var function_desc = talib.explain("RSI");
+// console.dir(function_desc);
